@@ -1,0 +1,1546 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jurnal Guru 2025</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
+    <style>
+        /* CSS sama seperti sebelumnya */
+        * {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        body {
+            margin: 0;
+            padding: 10px;
+            background-color: #f5f5f5;
+            font-size: 14px;
+        }
+        .container {
+            max-width: 100%;
+            margin: 0 auto;
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            overflow-x: auto;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #2c3e50;
+            padding-bottom: 10px;
+        }
+        .header h1 {
+            color: #2c3e50;
+            margin-bottom: 5px;
+            font-size: 1.4em;
+        }
+        .header h2, .header h3 {
+            margin: 5px 0;
+            font-size: 1.1em;
+        }
+        .info-section {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        @media (min-width: 768px) {
+            .info-section {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+        .info-card {
+            background: #f8f9fa;
+            padding: 12px;
+            border-radius: 5px;
+            border-left: 4px solid #3498db;
+        }
+        .info-card h3 {
+            margin-top: 0;
+            color: #2c3e50;
+            font-size: 1em;
+        }
+        .info-card p {
+            margin: 5px 0;
+            font-size: 0.9em;
+        }
+        .controls {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+        button {
+            padding: 8px 12px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+            font-size: 0.85em;
+        }
+        .btn-primary {
+            background: #3498db;
+            color: white;
+        }
+        .btn-success {
+            background: #2ecc71;
+            color: white;
+        }
+        .btn-danger {
+            background: #e74c3c;
+            color: white;
+        }
+        .btn-warning {
+            background: #f39c12;
+            color: white;
+        }
+        .btn-info {
+            background: #17a2b8;
+            color: white;
+        }
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+        button:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 15px;
+            font-size: 0.8em;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+            word-wrap: break-word;
+        }
+        th {
+            background-color: #2c3e50;
+            color: white;
+            position: sticky;
+            top: 0;
+            font-weight: bold;
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        tr:hover {
+            background-color: #e3f2fd;
+        }
+        input, select, textarea {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .action-buttons {
+            display: flex;
+            gap: 4px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .action-buttons button {
+            padding: 4px 8px;
+            font-size: 0.75em;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            justify-content: center;
+            align-items: flex-start;
+            z-index: 1000;
+            overflow-y: auto;
+            padding: 20px 10px;
+        }
+        .modal-content {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            width: 100%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        .form-group {
+            margin-bottom: 12px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+        .modal-buttons {
+            display: flex;
+            justify-content: flex-end;
+            gap: 8px;
+            margin-top: 15px;
+        }
+        .absensi-section {
+            margin-top: 10px;
+            border-top: 1px solid #ddd;
+            padding-top: 10px;
+        }
+        .absensi-list {
+            max-height: 200px;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 8px;
+            margin-bottom: 10px;
+        }
+        .absensi-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 5px;
+            border-bottom: 1px solid #eee;
+        }
+        .absensi-item:last-child {
+            border-bottom: none;
+        }
+        .status-buttons {
+            display: flex;
+            gap: 5px;
+        }
+        .status-btn {
+            padding: 3px 8px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 0.8em;
+        }
+        .status-S { background: #2ecc71; color: white; }
+        .status-I { background: #f39c12; color: white; }
+        .status-A { background: #e74c3c; color: white; }
+        .compact-view {
+            display: none;
+        }
+        .signature-section {
+            display: none;
+        }
+        .absensi-detail {
+            font-size: 0.7em;
+            text-align: left;
+            margin-top: 5px;
+            line-height: 1.2;
+        }
+        .student-status {
+            display: inline-block;
+            margin-right: 8px;
+        }
+        @media (max-width: 767px) {
+            .full-view {
+                display: none;
+            }
+            .compact-view {
+                display: block;
+            }
+            .compact-card {
+                background: #f8f9fa;
+                padding: 10px;
+                margin-bottom: 10px;
+                border-radius: 5px;
+                border-left: 4px solid #3498db;
+            }
+            .compact-card h4 {
+                margin: 0 0 8px 0;
+                color: #2c3e50;
+            }
+            .compact-info {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 5px;
+                font-size: 0.8em;
+            }
+        }
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            .container, .container * {
+                visibility: visible;
+            }
+            .container {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                box-shadow: none;
+            }
+            .controls, button {
+                display: none !important;
+            }
+            .signature-section {
+                display: block;
+                margin-top: 50px;
+                page-break-before: always;
+            }
+            .signature-row {
+                display: flex;
+                justify-content: space-between;
+                margin-top: 100px;
+            }
+            .signature-box {
+                text-align: center;
+                width: 45%;
+            }
+            .signature-line {
+                border-top: 1px solid #000;
+                margin: 60px 0 10px 0;
+                padding-top: 5px;
+            }
+        }
+        .backup-section {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            border-left: 4px solid #17a2b8;
+        }
+        .backup-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+        .export-options {
+            margin-top: 10px;
+            padding: 10px;
+            background: #e8f4fc;
+            border-radius: 5px;
+            border-left: 4px solid #3498db;
+        }
+        .export-options label {
+            display: inline-flex;
+            align-items: center;
+            margin-right: 15px;
+            cursor: pointer;
+        }
+        .export-options input {
+            width: auto;
+            margin-right: 5px;
+        }
+    /* menu kiri */
+    .wrapper {
+      display: flex;
+      transition: transform 0.3s ease;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      width: 250px;
+      height: 100vh;
+      background-color: #333;
+      color: white;
+      padding: 1em;
+      position: fixed;
+      top: 0;
+      left: -280px;
+      z-index: 1000;
+      transition: left 0.3s ease;
+      text-align: left;
+    }
+
+    .sidebar.open {
+      left: 0;
+    }
+
+    .sidebar h2 {
+      color: #fff;
+    }
+
+    .sidebar a {
+      display: block;
+      color: #ccc;
+      padding: 10px 0;
+      text-decoration: none;
+    }
+
+    .sidebar a:hover {
+      color: #fff;
+    }
+
+    /* Overlay (untuk HP) */
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.3);
+      z-index: 999;
+      display: none;
+    }
+
+    .overlay.active {
+      display: block;
+    }
+
+    .menu-btn {
+      position: fixed;
+      top: 1rem;
+      left: 1rem;
+      font-size: 24px;
+      cursor: pointer;
+      z-index: 1100;
+      background: #fff;
+      padding: 5px 10px;
+      border-radius: 5px;
+    }
+    </style>
+</head>
+<body>
+<div class="menu-btn" onclick="toggleSidebar()">☰</div>
+
+  <div class="sidebar" id="sidebar">
+    <center><img src="https://boymohlis.github.io/Madura-Dictionary/madura.png" width="70px" height="70px" style="border-radius: 50%; border-color: white; border-style: solid;"></center><hr>
+    <h2>Menu</h2><hr>
+    <a href="index.html">Beranda</a>
+    <a href="index02.html"> >> Multi Kelas</a>
+    <a href="https://ra-adirasa.blogspot.com/">R.A. Adirasa</a>
+    <a href="help.html">Cara Pakai</a>
+    <a href="about.html">Tentang Aplikasi</a>
+  </div>
+
+  <div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
+
+    <div class="container">
+        <div class="header">
+            <h1>JURNAL GURU 2025</h1>
+            <h2 id="mapelDisplay">Mata Pelajaran: <span id="mapelValue">Pendidikan Pancasila</span></h2>
+            <h3 id="kelasDisplay">Kelas/Semester: <span id="kelasValue">VII / Ganjil</span></h3>
+            <p><strong>Fase:</strong> <span id="faseValue">D</span> | <strong>Alokasi Waktu:</strong> <span id="waktuValue">-</span></p>
+        </div>
+
+        <div class="info-section">
+            <div class="info-card">
+                <h3>Informasi Guru</h3>
+                <p><strong>Nama:</strong> <span id="teacherName">-</span></p>
+                <p><strong>Sekolah:</strong> <span id="schoolName">-</span></p>
+            </div>
+            <div class="info-card">
+                <h3>Statistik</h3>
+                <p><strong>Total Pertemuan:</strong> <span id="totalMeetings">0</span></p>
+                <p><strong>Pertemuan Terakhir:</strong> <span id="lastMeeting">-</span></p>
+                <p><strong>Total Siswa:</strong> <span id="totalStudents">0</span></p>
+            </div>
+        </div>
+
+        <div class="controls">
+            <button class="btn-primary" onclick="openAddModal()">Tambah Data</button>
+            <button class="btn-info" onclick="openSettingsModal()">Edit Settings</button>
+            <button class="btn-warning" onclick="openStudentModal()">Kelola Siswa</button>
+            <button class="btn-success" onclick="showExportOptions()">Export PDF</button>
+            <button class="btn-success" onclick="exportToWord()">Export Word</button>
+            <button class="btn-primary" onclick="printWithSignature()">Cetak Lengkap</button>
+            <button class="btn-danger" onclick="clearAllData()">Hapus Semua</button>
+        </div>
+
+        <!-- Opsi Export PDF -->
+        <div class="export-options" id="exportOptions" style="display: none;">
+            <h4>Pilihan Export PDF:</h4>
+            <label>
+                <input type="radio" name="pdfFormat" value="landscape" checked> Landscape (Lebar)
+            </label>
+            <label>
+                <input type="radio" name="pdfFormat" value="portrait"> Portrait (Normal)
+            </label>
+            <label>
+                <input type="radio" name="pdfFormat" value="compact"> Compact (Font Kecil)
+            </label>
+            <div style="margin-top: 10px;">
+                <button class="btn-success" onclick="exportToPDF()">Export PDF dengan Pilihan</button>
+                <button class="btn-danger" onclick="hideExportOptions()">Batal</button>
+            </div>
+        </div>
+
+        <!-- Tampilan Desktop -->
+        <div class="full-view">
+            <table id="journalTable">
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Hari/Tgl</th>
+                        <th>Jam</th>
+                        <th>JP</th>
+                        <th>Temu</th>
+                        <th>Tujuan Pembelajaran</th>
+                        <th>IKTP</th>
+                        <th>Materi</th>
+                        <th>Capaian</th>
+                        <th>Absensi (S/I/A)</th>
+                        <th>Keterangan</th>
+                        <th>Aksi</th>
+                    </tr>
+                </thead>
+                <tbody id="journalBody">
+                    <!-- Data akan diisi oleh JavaScript -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Tampilan Mobile -->
+        <div class="compact-view" id="compactView">
+            <!-- Data akan diisi oleh JavaScript -->
+        </div>
+
+        <!-- Section Backup Data -->
+        <div class="backup-section">
+            <h3>Backup & Restore Data</h3>
+            <p>Gunakan fitur ini untuk mencadangkan data atau memindahkan ke perangkat lain</p>
+            <div class="backup-buttons">
+                <button class="btn-success" onclick="exportToJSON()">Export ke JSON</button>
+                <button class="btn-warning" onclick="importFromJSON()">Import dari JSON</button>
+                <button class="btn-secondary" onclick="showDataInfo()">Info Data</button>
+            </div>
+        </div>
+
+        <!-- Section Tanda Tangan (Muncul saat print) -->
+        <div class="signature-section" id="signatureSection">
+            <div class="signature-row">
+                <div class="signature-box">
+                    <p>Mengetahui,</p>
+                    <p>Kepala Sekolah</p>
+                    <div class="signature-line"></div>
+                    <p><strong id="kepalaSekolahName">[Nama Kepala Sekolah]</strong></p>
+                    <p>NIP: <span id="kepalaSekolahNIP">-</span></p>
+                </div>
+                <div class="signature-box">
+                    <p>Guru Mata Pelajaran,</p>
+                    <div class="signature-line"></div>
+                    <p><strong id="guruNamePrint">[Nama Guru]</strong></p>
+                    <p>NIP: <span id="guruNIP">-</span></p>
+                </div>
+            </div>
+            <div style="margin-top: 30px; font-style: italic;">
+                <p><strong>Catatan:</strong> <span id="catatanKepala">Jurnal ini telah diperiksa dan disetujui untuk digunakan sebagai bukti administrasi pembelajaran.</span></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal untuk menambah/mengedit data -->
+    <div id="dataModal" class="modal">
+        <div class="modal-content">
+            <h2 id="modalTitle">Tambah Data Jurnal</h2>
+            <form id="journalForm">
+                <div class="form-group">
+                    <label for="hariTgl">Hari/Tanggal:</label>
+                    <input type="date" id="hariTgl" required>
+                </div>
+                <div class="form-group">
+                    <label for="jamKe">Jam Ke:</label>
+                    <input type="number" id="jamKe" min="1" required>
+                </div>
+                <div class="form-group">
+                    <label for="jp">JP:</label>
+                    <input type="number" id="jp" min="1" required>
+                </div>
+                <div class="form-group">
+                    <label for="temuKe">Temu Ke-:</label>
+                    <input type="number" id="temuKe" min="1" required>
+                </div>
+                <div class="form-group">
+                    <label for="tujuanPembelajaran">Tujuan Pembelajaran:</label>
+                    <textarea id="tujuanPembelajaran" rows="3" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="iktp">IKTP:</label>
+                    <textarea id="iktp" rows="2" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="materiPembelajaran">Materi Pembelajaran:</label>
+                    <textarea id="materiPembelajaran" rows="3" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="capaianKKTP">Capaian KKTP:</label>
+                    <select id="capaianKKTP" required>
+                        <option value="">Pilih Capaian</option>
+                        <option value="Tercapai">Tercapai</option>
+                        <option value="Tidak Tercapai">Tidak Tercapai</option>
+                        <option value="Sebagian Tercapai">Sebagian Tercapai</option>
+                    </select>
+                </div>
+                
+                <div class="absensi-section">
+                    <h4>Absensi Siswa</h4>
+                    <div class="absensi-list" id="absensiList">
+                        <!-- Daftar siswa akan diisi oleh JavaScript -->
+                    </div>
+                    <div class="form-group">
+                        <label for="keterangan">Keterangan:</label>
+                        <textarea id="keterangan" rows="2"></textarea>
+                    </div>
+                </div>
+                
+                <div class="modal-buttons">
+                    <button type="button" class="btn-danger" onclick="closeModal()">Batal</button>
+                    <button type="submit" class="btn-success">Simpan</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal untuk settings -->
+    <div id="settingsModal" class="modal">
+        <div class="modal-content">
+            <h2>Pengaturan Jurnal</h2>
+            <form id="settingsForm">
+                <div class="form-group">
+                    <label for="inputMapel">Mata Pelajaran:</label>
+                    <input type="text" id="inputMapel" required>
+                </div>
+                <div class="form-group">
+                    <label for="inputKelas">Kelas/Semester:</label>
+                    <input type="text" id="inputKelas" required>
+                </div>
+                <div class="form-group">
+                    <label for="inputFase">Fase:</label>
+                    <input type="text" id="inputFase" required>
+                </div>
+                <div class="form-group">
+                    <label for="inputWaktu">Alokasi Waktu:</label>
+                    <input type="text" id="inputWaktu" required>
+                </div>
+                <div class="form-group">
+                    <label for="inputTeacherName">Nama Guru:</label>
+                    <input type="text" id="inputTeacherName" required>
+                </div>
+                <div class="form-group">
+                    <label for="inputTeacherNIP">NIP Guru:</label>
+                    <input type="text" id="inputTeacherNIP">
+                </div>
+                <div class="form-group">
+                    <label for="inputSchoolName">Nama Sekolah:</label>
+                    <input type="text" id="inputSchoolName" required>
+                </div>
+                <div class="form-group">
+                    <label for="inputKepalaName">Nama Kepala Sekolah:</label>
+                    <input type="text" id="inputKepalaName">
+                </div>
+                <div class="form-group">
+                    <label for="inputKepalaNIP">NIP Kepala Sekolah:</label>
+                    <input type="text" id="inputKepalaNIP">
+                </div>
+                <div class="form-group">
+                    <label for="inputCatatan">Catatan Kepala Sekolah:</label>
+                    <textarea id="inputCatatan" rows="3">Jurnal ini telah diperiksa dan disetujui untuk digunakan sebagai bukti administrasi pembelajaran.</textarea>
+                </div>
+                <div class="modal-buttons">
+                    <button type="button" class="btn-danger" onclick="closeSettingsModal()">Batal</button>
+                    <button type="submit" class="btn-success">Simpan</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal untuk kelola siswa -->
+    <div id="studentModal" class="modal">
+        <div class="modal-content">
+            <h2>Kelola Data Siswa</h2>
+            <div class="form-group">
+                <label for="newStudentName">Tambah Siswa Baru:</label>
+                <div style="display: flex; gap: 8px;">
+                    <input type="text" id="newStudentName" placeholder="Nama siswa">
+                    <button type="button" class="btn-success" onclick="addStudent()">Tambah</button>
+                </div>
+            </div>
+            <div class="absensi-list">
+                <h4>Daftar Siswa</h4>
+                <div id="studentList">
+                    <!-- Daftar siswa akan diisi oleh JavaScript -->
+                </div>
+            </div>
+            <div class="modal-buttons">
+                <button type="button" class="btn-danger" onclick="closeStudentModal()">Tutup</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Data aplikasi
+        let journalData = JSON.parse(localStorage.getItem('journalData')) || [];
+        let students = JSON.parse(localStorage.getItem('students')) || [];
+        let settings = JSON.parse(localStorage.getItem('settings')) || {
+            mapel: 'Pendidikan Pancasila',
+            kelas: 'VII / Ganjil',
+            fase: 'D',
+            waktu: '2 JP per minggu',
+            teacherName: '',
+            teacherNIP: '',
+            schoolName: '',
+            kepalaName: '',
+            kepalaNIP: '',
+            catatan: 'Jurnal ini telah diperiksa dan disetujui untuk digunakan sebagai bukti administrasi pembelajaran.'
+        };
+        let editIndex = -1;
+        let currentAbsensi = {};
+
+        // Elemen DOM
+        const journalBody = document.getElementById('journalBody');
+        const compactView = document.getElementById('compactView');
+        const dataModal = document.getElementById('dataModal');
+        const settingsModal = document.getElementById('settingsModal');
+        const studentModal = document.getElementById('studentModal');
+        const journalForm = document.getElementById('journalForm');
+        const settingsForm = document.getElementById('settingsForm');
+        const absensiList = document.getElementById('absensiList');
+        const studentList = document.getElementById('studentList');
+
+        // Inisialisasi
+        document.addEventListener('DOMContentLoaded', function() {
+            loadSettings();
+            loadStudents();
+            loadJournalData();
+            updateStatistics();
+        });
+
+        // Memuat settings
+        function loadSettings() {
+            document.getElementById('mapelValue').textContent = settings.mapel;
+            document.getElementById('kelasValue').textContent = settings.kelas;
+            document.getElementById('faseValue').textContent = settings.fase;
+            document.getElementById('waktuValue').textContent = settings.waktu;
+            document.getElementById('teacherName').textContent = settings.teacherName;
+            document.getElementById('schoolName').textContent = settings.schoolName;
+            
+            // Untuk print
+            document.getElementById('guruNamePrint').textContent = settings.teacherName;
+            document.getElementById('guruNIP').textContent = settings.teacherNIP;
+            document.getElementById('kepalaSekolahName').textContent = settings.kepalaName;
+            document.getElementById('kepalaSekolahNIP').textContent = settings.kepalaNIP;
+            document.getElementById('catatanKepala').textContent = settings.catatan;
+        }
+
+        // Memuat data siswa
+        function loadStudents() {
+            studentList.innerHTML = '';
+            
+            if (students.length === 0) {
+                studentList.innerHTML = '<p style="text-align: center; color: #666;">Belum ada data siswa</p>';
+                return;
+            }
+
+            students.forEach((student, index) => {
+                const studentItem = document.createElement('div');
+                studentItem.className = 'absensi-item';
+                studentItem.innerHTML = `
+                    <span>${student.name}</span>
+                    <button class="btn-danger" onclick="removeStudent(${index})" style="padding: 3px 8px; font-size: 0.8em;">Hapus</button>
+                `;
+                studentList.appendChild(studentItem);
+            });
+        }
+
+        // Memuat data jurnal
+        function loadJournalData() {
+            journalBody.innerHTML = '';
+            compactView.innerHTML = '';
+            
+            if (journalData.length === 0) {
+                journalBody.innerHTML = '<tr><td colspan="12" style="text-align: center;">Tidak ada data jurnal. Klik "Tambah Data" untuk menambahkan.</td></tr>';
+                compactView.innerHTML = '<div class="compact-card"><p style="text-align: center;">Tidak ada data jurnal</p></div>';
+                return;
+            }
+
+            // Urutkan data berdasarkan tanggal
+            journalData.sort((a, b) => new Date(a.hariTgl) - new Date(b.hariTgl));
+
+            journalData.forEach((item, index) => {
+                // Buat daftar absensi detail
+                let absensiDetail = '';
+                students.forEach(student => {
+                    const status = item.absensi[student.id] || 'S';
+                    const statusChar = status === 'S' ? 'S' : status === 'I' ? 'I' : 'A';
+                    absensiDetail += `<div class="student-status">${student.name} = ${statusChar}</div>`;
+                });
+
+                // Tampilan desktop
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${index + 1}</td>
+                    <td>${formatDate(item.hariTgl)}</td>
+                    <td>${item.jamKe}</td>
+                    <td>${item.jp}</td>
+                    <td>${item.temuKe}</td>
+                    <td>${truncateText(item.tujuanPembelajaran, 50)}</td>
+                    <td>${truncateText(item.iktp, 50)}</td>
+                    <td>${truncateText(item.materiPembelajaran, 50)}</td>
+                    <td>${item.capaianKKTP}</td>
+                    <td>
+                        <strong>S:${item.absensiSummary?.S || 0} I:${item.absensiSummary?.I || 0} A:${item.absensiSummary?.A || 0}</strong>
+                        <div class="absensi-detail">
+                            ${absensiDetail}
+                        </div>
+                    </td>
+                    <td>${truncateText(item.keterangan || '-', 30)}</td>
+                    <td class="action-buttons">
+                        <button class="btn-primary" onclick="editData(${index})">Edit</button>
+                        <button class="btn-warning" onclick="duplicateData(${index})">Duplikat</button>
+                        <button class="btn-danger" onclick="deleteData(${index})">Hapus</button>
+                    </td>
+                `;
+                journalBody.appendChild(row);
+
+                // Tampilan mobile
+                const compactCard = document.createElement('div');
+                compactCard.className = 'compact-card';
+                compactCard.innerHTML = `
+                    <h4>Pertemuan ${item.temuKe} - ${formatDate(item.hariTgl)}</h4>
+                    <div class="compact-info">
+                        <div><strong>Jam:</strong> ${item.jamKe}</div>
+                        <div><strong>JP:</strong> ${item.jp}</div>
+                        <div><strong>Materi:</strong> ${truncateText(item.materiPembelajaran, 40)}</div>
+                        <div><strong>Capaian:</strong> ${item.capaianKKTP}</div>
+                        <div><strong>Absensi:</strong> S:${item.absensiSummary?.S || 0} I:${item.absensiSummary?.I || 0} A:${item.absensiSummary?.A || 0}</div>
+                    </div>
+                    <div class="action-buttons" style="margin-top: 8px;">
+                        <button class="btn-primary" onclick="editData(${index})">Edit</button>
+                        <button class="btn-warning" onclick="duplicateData(${index})">Duplikat</button>
+                        <button class="btn-danger" onclick="deleteData(${index})">Hapus</button>
+                    </div>
+                `;
+                compactView.appendChild(compactCard);
+            });
+        }
+
+        // Format tanggal
+        function formatDate(dateString) {
+            const options = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' };
+            return new Date(dateString).toLocaleDateString('id-ID', options);
+        }
+
+        // Potong teks
+        function truncateText(text, length) {
+            return text.length > length ? text.substring(0, length) + '...' : text;
+        }
+
+        // Membuka modal tambah data
+        function openAddModal() {
+            editIndex = -1;
+            currentAbsensi = {};
+            document.getElementById('modalTitle').textContent = 'Tambah Data Jurnal';
+            journalForm.reset();
+            loadAbsensiList();
+            dataModal.style.display = 'flex';
+        }
+
+        // Menutup modal
+        function closeModal() {
+            dataModal.style.display = 'none';
+        }
+
+        // Memuat daftar absensi
+        function loadAbsensiList() {
+            absensiList.innerHTML = '';
+            
+            if (students.length === 0) {
+                absensiList.innerHTML = '<p style="text-align: center; color: #666;">Belum ada data siswa. Klik "Kelola Siswa" untuk menambahkan.</p>';
+                return;
+            }
+
+            students.forEach((student, index) => {
+                const absensiItem = document.createElement('div');
+                absensiItem.className = 'absensi-item';
+                const status = currentAbsensi[student.id] || 'S';
+                absensiItem.innerHTML = `
+                    <span>${student.name}</span>
+                    <div class="status-buttons">
+                        <button class="status-btn status-S ${status === 'S' ? 'active' : ''}" onclick="setAbsensi('${student.id}', 'S')">S</button>
+                        <button class="status-btn status-I ${status === 'I' ? 'active' : ''}" onclick="setAbsensi('${student.id}', 'I')">I</button>
+                        <button class="status-btn status-A ${status === 'A' ? 'active' : ''}" onclick="setAbsensi('${student.id}', 'A')">A</button>
+                    </div>
+                `;
+                absensiList.appendChild(absensiItem);
+            });
+        }
+
+        // Set status absensi
+        function setAbsensi(studentId, status) {
+            currentAbsensi[studentId] = status;
+            loadAbsensiList();
+        }
+
+        // Menyimpan data jurnal
+        journalForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Hitung summary absensi
+            const absensiSummary = { S: 0, I: 0, A: 0 };
+            Object.values(currentAbsensi).forEach(status => {
+                absensiSummary[status]++;
+            });
+
+            const formData = {
+                hariTgl: document.getElementById('hariTgl').value,
+                jamKe: document.getElementById('jamKe').value,
+                jp: document.getElementById('jp').value,
+                temuKe: document.getElementById('temuKe').value,
+                tujuanPembelajaran: document.getElementById('tujuanPembelajaran').value,
+                iktp: document.getElementById('iktp').value,
+                materiPembelajaran: document.getElementById('materiPembelajaran').value,
+                capaianKKTP: document.getElementById('capaianKKTP').value,
+                absensi: {...currentAbsensi},
+                absensiSummary: absensiSummary,
+                keterangan: document.getElementById('keterangan').value
+            };
+
+            if (editIndex === -1) {
+                // Tambah data baru
+                journalData.push(formData);
+            } else {
+                // Edit data yang sudah ada
+                journalData[editIndex] = formData;
+            }
+
+            saveJournalData();
+            closeModal();
+            loadJournalData();
+            updateStatistics();
+        });
+
+        // Mengedit data
+        function editData(index) {
+            editIndex = index;
+            const item = journalData[index];
+            
+            document.getElementById('modalTitle').textContent = 'Edit Data Jurnal';
+            document.getElementById('hariTgl').value = item.hariTgl;
+            document.getElementById('jamKe').value = item.jamKe;
+            document.getElementById('jp').value = item.jp;
+            document.getElementById('temuKe').value = item.temuKe;
+            document.getElementById('tujuanPembelajaran').value = item.tujuanPembelajaran;
+            document.getElementById('iktp').value = item.iktp;
+            document.getElementById('materiPembelajaran').value = item.materiPembelajaran;
+            document.getElementById('capaianKKTP').value = item.capaianKKTP;
+            document.getElementById('keterangan').value = item.keterangan || '';
+            
+            currentAbsensi = {...item.absensi};
+            loadAbsensiList();
+            dataModal.style.display = 'flex';
+        }
+
+        // Fungsi untuk menduplikat data
+function duplicateData(index) {
+    const originalData = journalData[index];
+    
+    // Buat salinan data dengan mengubah beberapa field
+    const duplicatedData = {
+        ...originalData,
+        hariTgl: new Date().toISOString().split('T')[0], // Tanggal hari ini
+        temuKe: journalData.length + 1, // Temu ke berikutnya
+        keterangan: `Duplikat dari pertemuan ${originalData.temuKe} - ${originalData.keterangan || ''}`
+    };
+    
+    // Tambahkan ke array
+    journalData.push(duplicatedData);
+    
+    // Simpan dan refresh
+    saveJournalData();
+    loadJournalData();
+    updateStatistics();
+    
+    alert(`Data pertemuan ${originalData.temuKe} berhasil diduplikat!`);
+}
+
+        // Menghapus data
+        function deleteData(index) {
+            if (confirm('Apakah Anda yakin ingin menghapus data ini?')) {
+                journalData.splice(index, 1);
+                saveJournalData();
+                loadJournalData();
+                updateStatistics();
+            }
+        }
+
+        // Menyimpan data ke localStorage
+        function saveJournalData() {
+            localStorage.setItem('journalData', JSON.stringify(journalData));
+        }
+
+        // Membuka modal settings
+        function openSettingsModal() {
+            document.getElementById('inputMapel').value = settings.mapel;
+            document.getElementById('inputKelas').value = settings.kelas;
+            document.getElementById('inputFase').value = settings.fase;
+            document.getElementById('inputWaktu').value = settings.waktu;
+            document.getElementById('inputTeacherName').value = settings.teacherName;
+            document.getElementById('inputTeacherNIP').value = settings.teacherNIP;
+            document.getElementById('inputSchoolName').value = settings.schoolName;
+            document.getElementById('inputKepalaName').value = settings.kepalaName;
+            document.getElementById('inputKepalaNIP').value = settings.kepalaNIP;
+            document.getElementById('inputCatatan').value = settings.catatan;
+            settingsModal.style.display = 'flex';
+        }
+
+        // Menutup modal settings
+        function closeSettingsModal() {
+            settingsModal.style.display = 'none';
+        }
+
+        // Menyimpan settings
+        settingsForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            settings.mapel = document.getElementById('inputMapel').value;
+            settings.kelas = document.getElementById('inputKelas').value;
+            settings.fase = document.getElementById('inputFase').value;
+            settings.waktu = document.getElementById('inputWaktu').value;
+            settings.teacherName = document.getElementById('inputTeacherName').value;
+            settings.teacherNIP = document.getElementById('inputTeacherNIP').value;
+            settings.schoolName = document.getElementById('inputSchoolName').value;
+            settings.kepalaName = document.getElementById('inputKepalaName').value;
+            settings.kepalaNIP = document.getElementById('inputKepalaNIP').value;
+            settings.catatan = document.getElementById('inputCatatan').value;
+            
+            localStorage.setItem('settings', JSON.stringify(settings));
+            loadSettings();
+            closeSettingsModal();
+        });
+
+        // Membuka modal siswa
+        function openStudentModal() {
+            studentModal.style.display = 'flex';
+        }
+
+        // Menutup modal siswa
+        function closeStudentModal() {
+            studentModal.style.display = 'none';
+        }
+
+        // Menambah siswa
+        function addStudent() {
+            const nameInput = document.getElementById('newStudentName');
+            const name = nameInput.value.trim();
+            
+            if (name) {
+                const newStudent = {
+                    id: 'student_' + Date.now(),
+                    name: name
+                };
+                students.push(newStudent);
+                saveStudents();
+                loadStudents();
+                nameInput.value = '';
+                updateStatistics();
+            }
+        }
+
+        // Menghapus siswa
+        function removeStudent(index) {
+            if (confirm('Apakah Anda yakin ingin menghapus siswa ini?')) {
+                students.splice(index, 1);
+                saveStudents();
+                loadStudents();
+                updateStatistics();
+            }
+        }
+
+        // Menyimpan data siswa
+        function saveStudents() {
+            localStorage.setItem('students', JSON.stringify(students));
+        }
+
+        // Update statistik
+        function updateStatistics() {
+            document.getElementById('totalMeetings').textContent = journalData.length;
+            document.getElementById('totalStudents').textContent = students.length;
+            
+            if (journalData.length > 0) {
+                const lastDate = new Date(Math.max(...journalData.map(item => new Date(item.hariTgl))));
+                document.getElementById('lastMeeting').textContent = formatDate(lastDate);
+            } else {
+                document.getElementById('lastMeeting').textContent = '-';
+            }
+        }
+
+        // Cetak dengan tanda tangan
+        function printWithSignature() {
+            const signatureSection = document.getElementById('signatureSection');
+            signatureSection.style.display = 'block';
+            window.print();
+            signatureSection.style.display = 'none';
+        }
+
+        // Fungsi untuk show/hide export options
+        function showExportOptions() {
+            document.getElementById('exportOptions').style.display = 'block';
+        }
+
+        function hideExportOptions() {
+            document.getElementById('exportOptions').style.display = 'none';
+        }
+
+        // Export ke PDF dengan pilihan format
+        function exportToPDF() {
+            const format = document.querySelector('input[name="pdfFormat"]:checked').value;
+            const { jsPDF } = window.jspdf;
+            
+            // Pilihan orientasi dan ukuran
+            let orientation = 'portrait';
+            let unit = 'mm';
+            let pageFormat = 'a4';
+            
+            if (format === 'landscape') {
+                orientation = 'landscape';
+            }
+            
+            const doc = new jsPDF({
+                orientation: orientation,
+                unit: unit,
+                format: pageFormat
+            });
+            
+            // Header
+            doc.setFontSize(16);
+            doc.text('JURNAL GURU 2025', doc.internal.pageSize.getWidth() / 2, 15, { align: 'center' });
+            doc.setFontSize(12);
+            doc.text(`Mata Pelajaran: ${settings.mapel} - ${settings.kelas}`, doc.internal.pageSize.getWidth() / 2, 22, { align: 'center' });
+            doc.text(`Fase: ${settings.fase} | Alokasi Waktu: ${settings.waktu}`, doc.internal.pageSize.getWidth() / 2, 29, { align: 'center' });
+            
+            // Info Guru
+            doc.text(`Guru: ${settings.teacherName} - ${settings.schoolName}`, 14, 40);
+            
+            // Konfigurasi tabel berdasarkan pilihan
+            let tableConfig = {
+                head: [['No', 'Hari/Tgl', 'Jam', 'JP', 'Temu', 'Tujuan Pembelajaran', 'Materi', 'Capaian', 'Absensi (S/I/A)', 'Keterangan']],
+                body: [],
+                startY: 50,
+                styles: { 
+                    fontSize: format === 'compact' ? 6 : 8,
+                    cellPadding: 2,
+                    lineColor: [0, 0, 0],
+                    lineWidth: 0.1,
+                    valign: 'top'
+                },
+                headStyles: { 
+                    fillColor: [44, 62, 80],
+                    textColor: [255, 255, 255],
+                    fontStyle: 'bold',
+                    fontSize: format === 'compact' ? 7 : 9
+                },
+                bodyStyles: {
+                    textColor: [0, 0, 0],
+                    fontSize: format === 'compact' ? 6 : 8
+                },
+                columnStyles: {
+                    0: { cellWidth: format === 'compact' ? 8 : 10 },
+                    1: { cellWidth: format === 'compact' ? 20 : 25 },
+                    2: { cellWidth: format === 'compact' ? 10 : 12 },
+                    3: { cellWidth: format === 'compact' ? 10 : 12 },
+                    4: { cellWidth: format === 'compact' ? 10 : 12 },
+                    5: { cellWidth: format === 'compact' ? 30 : 35 },
+                    6: { cellWidth: format === 'compact' ? 30 : 35 },
+                    7: { cellWidth: format === 'compact' ? 15 : 20 },
+                    8: { 
+                        cellWidth: format === 'compact' ? 25 : 35,
+                        fontStyle: 'bold'
+                    },
+                    9: { cellWidth: format === 'compact' ? 20 : 25 }
+                },
+                didDrawCell: function(data) {
+                    // Custom rendering untuk kolom absensi
+                    if (data.column.index === 8 && data.cell.section === 'body') {
+                        const lines = data.cell.text[0].split('\n');
+                        const summary = lines[0];
+                        const details = lines.slice(1);
+                        
+                        doc.setFontSize(format === 'compact' ? 5 : 7);
+                        doc.setFont(undefined, 'bold');
+                        doc.text(summary, data.cell.x + 2, data.cell.y + 4);
+                        
+                        doc.setFont(undefined, 'normal');
+                        doc.setFontSize(format === 'compact' ? 4 : 6);
+                        
+                        let yOffset = format === 'compact' ? 7 : 9;
+                        details.forEach((detail, index) => {
+                            if (detail.trim()) {
+                                doc.text(detail, data.cell.x + 2, data.cell.y + yOffset + (index * (format === 'compact' ? 3 : 4)));
+                            }
+                        });
+                        
+                        return false; // Prevent default rendering
+                    }
+                },
+                margin: { left: 10, right: 10 }
+            };
+
+            // Prepare data
+            tableConfig.body = journalData.map((item, index) => {
+                // Buat string absensi detail
+                let absensiDetail = '';
+                students.forEach(student => {
+                    const status = item.absensi[student.id] || 'S';
+                    const statusChar = status === 'S' ? 'S' : status === 'I' ? 'I' : 'A';
+                    absensiDetail += `${student.name} = ${statusChar}\n`;
+                });
+
+                return [
+                    index + 1,
+                    formatDate(item.hariTgl),
+                    item.jamKe,
+                    item.jp,
+                    item.temuKe,
+                    truncateText(item.tujuanPembelajaran, format === 'compact' ? 25 : 30),
+                    truncateText(item.materiPembelajaran, format === 'compact' ? 25 : 30),
+                    item.capaianKKTP,
+                    `S:${item.absensiSummary?.S || 0} I:${item.absensiSummary?.I || 0} A:${item.absensiSummary?.A || 0}\n${absensiDetail}`,
+                    truncateText(item.keterangan || '-', format === 'compact' ? 15 : 20)
+                ];
+            });
+
+            // Generate tabel
+            doc.autoTable(tableConfig);
+            
+            // Tanda tangan
+            const finalY = doc.lastAutoTable.finalY + 15;
+            
+            // Cek jika perlu halaman baru untuk tanda tangan
+            if (finalY > doc.internal.pageSize.getHeight() - 50) {
+                doc.addPage();
+            }
+            
+            doc.setFontSize(12);
+            const pageWidth = doc.internal.pageSize.getWidth();
+            doc.text('Mengetahui,', pageWidth * 0.25, finalY);
+            doc.text('Guru Mata Pelajaran,', pageWidth * 0.75, finalY);
+            
+            const signatureY = finalY + 25;
+            doc.line(pageWidth * 0.15, signatureY, pageWidth * 0.35, signatureY);
+            doc.line(pageWidth * 0.65, signatureY, pageWidth * 0.85, signatureY);
+            
+            doc.setFontSize(10);
+            doc.text(settings.kepalaName || 'Kepala Sekolah', pageWidth * 0.25, signatureY + 8, { align: 'center' });
+            doc.text(settings.teacherName, pageWidth * 0.75, signatureY + 8, { align: 'center' });
+            
+            doc.text(`NIP: ${settings.kepalaNIP || '-'}`, pageWidth * 0.25, signatureY + 13, { align: 'center' });
+            doc.text(`NIP: ${settings.teacherNIP || '-'}`, pageWidth * 0.75, signatureY + 13, { align: 'center' });
+            
+            doc.setFontSize(9);
+            doc.text(`Catatan: ${settings.catatan}`, 14, signatureY + 25, { 
+                maxWidth: pageWidth - 28,
+                align: 'left'
+            });
+            
+            // Sembunyikan opsi export setelah selesai
+            hideExportOptions();
+            
+            doc.save(`jurnal_guru_2025_${format}.pdf`);
+        }
+
+        // Export ke Word dengan landscape
+                function exportToWord() {
+            let content = `
+                <html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
+                <head>
+                    <meta charset="utf-8">
+                    <title>Jurnal Guru 2025</title>
+                    <style>
+                        @page {
+                            size: landscape;
+                            margin: 0.5cm;
+                        }
+                        body { 
+                            font-family: Arial, sans-serif; 
+                            margin: 15px;
+                        }
+                        h1 { 
+                            text-align: center; 
+                            color: #2c3e50; 
+                            font-size: 18px;
+                            margin-bottom: 5px;
+                        }
+                        h2, h3 { 
+                            text-align: center; 
+                            margin: 3px 0;
+                        }
+                        h2 { font-size: 14px; }
+                        h3 { font-size: 12px; }
+                        .info-header {
+                            text-align: center;
+                            margin-bottom: 10px;
+                        }
+                        table { 
+                            width: 100%; 
+                            border-collapse: collapse; 
+                            margin-top: 15px; 
+                            margin-bottom: 20px;
+                            font-size: 9px;
+                            table-layout: fixed;
+                        }
+                        th, td { 
+                            border: 1px solid #000; 
+                            padding: 4px; 
+                            text-align: center; 
+                            vertical-align: top; 
+                            word-wrap: break-word;
+                        }
+                        th { 
+                            background-color: #2c3e50; 
+                            color: white; 
+                            font-weight: bold;
+                            font-size: 8px;
+                        }
+                        .absensi-detail { 
+                            font-size: 7px; 
+                            text-align: left; 
+                            margin-top: 2px;
+                            line-height: 1.0;
+                        }
+                        .student-status { 
+                            display: inline-block; 
+                            margin-right: 5px;
+                            white-space: nowrap;
+                        }
+                        .signature-table { 
+                            width: 100%; 
+                            margin-top: 30px; 
+                            border: none; 
+                        }
+                        .signature-table td { 
+                            border: none; 
+                            text-align: center; 
+                            vertical-align: top; 
+                            padding: 15px; 
+                        }
+                        .signature-line { 
+                            border-top: 1px solid #000; 
+                            margin-top: 40px; 
+                            padding-top: 3px; 
+                        }
+                        .note { 
+                            font-style: italic; 
+                            margin-top: 20px;
+                            font-size: 9px;
+                        }
+                        /* Column widths yang diperbaiki */
+                        .col-no { width: 3%; }
+                        .col-tanggal { width: 8%; }
+                        .col-jam { width: 4%; }
+                        .col-jp { width: 4%; }
+                        .col-temu { width: 4%; }
+                        .col-tujuan { width: 15%; }
+                        .col-iktp { width: 12%; }
+                        .col-materi { width: 15%; }
+                        .col-capaian { width: 8%; }
+                        .col-absensi { width: 15%; }
+                        .col-keterangan { width: 12%; }
+                    </style>
+                </head>
+                <body>
+                    <div class="info-header">
+                        <h1>JURNAL GURU 2025</h1>
+                        <h2>${settings.mapel} - ${settings.kelas}</h2>
+                        <h3>Fase: ${settings.fase} | Alokasi Waktu: ${settings.waktu}</h3>
+                        <p style="text-align: center; font-size: 10px; margin: 5px 0;">
+                            <strong>Guru:</strong> ${settings.teacherName} | <strong>Sekolah:</strong> ${settings.schoolName}
+                        </p>
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th class="col-no">No</th>
+                                <th class="col-tanggal">Hari/Tgl</th>
+                                <th class="col-jam">Jam Ke</th>
+                                <th class="col-jp">JP</th>
+                                <th class="col-temu">Temu Ke-</th>
+                                <th class="col-tujuan">Tujuan Pembelajaran</th>
+                                <th class="col-iktp">IKTP</th>
+                                <th class="col-materi">Materi Pembelajaran</th>
+                                <th class="col-capaian">Capaian KKTP</th>
+                                <th class="col-absensi">Absensi (S/I/A)</th>
+                                <th class="col-keterangan">Keterangan</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+            `;
+            
+            journalData.forEach((item, index) => {
+                // Buat daftar absensi detail
+                let absensiDetail = '';
+                students.forEach(student => {
+                    const status = item.absensi[student.id] || 'S';
+                    const statusChar = status === 'S' ? 'S' : status === 'I' ? 'I' : 'A';
+                    absensiDetail += `<span class="student-status">${student.name} = ${statusChar}</span>`;
+                });
+
+                content += `
+                    <tr>
+                        <td class="col-no">${index + 1}</td>
+                        <td class="col-tanggal">${formatDate(item.hariTgl)}</td>
+                        <td class="col-jam">${item.jamKe}</td>
+                        <td class="col-jp">${item.jp}</td>
+                        <td class="col-temu">${item.temuKe}</td>
+                        <td class="col-tujuan">${item.tujuanPembelajaran}</td>
+                        <td class="col-iktp">${item.iktp}</td>
+                        <td class="col-materi">${item.materiPembelajaran}</td>
+                        <td class="col-capaian">${item.capaianKKTP}</td>
+                        <td class="col-absensi">
+                            <strong>S:${item.absensiSummary?.S || 0} I:${item.absensiSummary?.I || 0} A:${item.absensiSummary?.A || 0}</strong>
+                            <div class="absensi-detail">
+                                ${absensiDetail}
+                            </div>
+                        </td>
+                        <td class="col-keterangan">${item.keterangan || '-'}</td>
+                    </tr>
+                `;
+            });
+            
+            content += `
+                        </tbody>
+                    </table>
+                    
+                    <table class="signature-table">
+                        <tr>
+                            <td width="45%">
+                                <p style="margin: 0; font-size: 10px;">Mengetahui,</p>
+                                <p style="margin: 0; font-size: 10px;">Kepala Sekolah</p>
+                                <div class="signature-line"></div>
+                                <p style="margin: 5px 0 0 0; font-size: 10px;"><strong>${settings.kepalaName || '[Nama Kepala Sekolah]'}</strong></p>
+                                <p style="margin: 0; font-size: 9px;">NIP: ${settings.kepalaNIP || '-'}</p>
+                            </td>
+                            <td width="10%"></td>
+                            <td width="45%">
+                                <p style="margin: 0; font-size: 10px;">Guru Mata Pelajaran,</p>
+                                <div class="signature-line"></div>
+                                <p style="margin: 5px 0 0 0; font-size: 10px;"><strong>${settings.teacherName}</strong></p>
+                                <p style="margin: 0; font-size: 9px;">NIP: ${settings.teacherNIP || '-'}</p>
+                            </td>
+                        </tr>
+                    </table>
+                    
+                    <div class="note">
+                        <p style="margin: 0; font-size: 9px;"><strong>Catatan:</strong> ${settings.catatan}</p>
+                    </div>
+                </body>
+                </html>
+            `;
+            
+            const blob = new Blob([content], { type: 'application/msword' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'jurnal_guru_2025.doc';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+        // Export ke JSON
+        function exportToJSON() {
+            const allData = {
+                journalData: journalData,
+                students: students,
+                settings: settings,
+                exportDate: new Date().toISOString(),
+                version: '1.0'
+            };
+            
+            const dataStr = JSON.stringify(allData, null, 2);
+            const dataBlob = new Blob([dataStr], { type: 'application/json' });
+            
+            const url = URL.createObjectURL(dataBlob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `jurnal_guru_backup_${new Date().toISOString().split('T')[0]}.json`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+            
+            alert('Data berhasil diexport ke file JSON!');
+        }
+
+        // Import dari JSON
+        function importFromJSON() {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = '.json';
+            
+            input.onchange = function(e) {
+                const file = e.target.files[0];
+                if (!file) return;
+                
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    try {
+                        const importedData = JSON.parse(e.target.result);
+                        
+                        if (confirm('Apakah Anda yakin ingin mengimpor data? Data saat ini akan diganti.')) {
+                            if (importedData.journalData) journalData = importedData.journalData;
+                            if (importedData.students) students = importedData.students;
+                            if (importedData.settings) settings = importedData.settings;
+                            
+                            saveJournalData();
+                            saveStudents();
+                            localStorage.setItem('settings', JSON.stringify(settings));
+                            
+                            loadSettings();
+                            loadStudents();
+                            loadJournalData();
+                            updateStatistics();
+                            
+                            alert('Data berhasil diimpor!');
+                        }
+                    } catch (error) {
+                        alert('Error: File tidak valid atau rusak.');
+                    }
+                };
+                reader.readAsText(file);
+            };
+            
+            input.click();
+        }
+
+        // Show data info
+        function showDataInfo() {
+            const totalSize = new Blob([JSON.stringify(journalData)]).size + 
+                             new Blob([JSON.stringify(students)]).size + 
+                             new Blob([JSON.stringify(settings)]).size;
+            
+            alert(`Info Data:\n\n` +
+                  `Total Pertemuan: ${journalData.length}\n` +
+                  `Total Siswa: ${students.length}\n` +
+                  `Ukuran Data: ${(totalSize / 1024).toFixed(2)} KB\n` +
+                  `Terakhir Diubah: ${new Date().toLocaleString('id-ID')}`);
+        }
+
+        // Hapus semua data
+        function clearAllData() {
+            if (confirm('Apakah Anda yakin ingin menghapus SEMUA data jurnal? Tindakan ini tidak dapat dibatalkan!')) {
+                journalData = [];
+                saveJournalData();
+                loadJournalData();
+                updateStatistics();
+                alert('Semua data telah dihapus.');
+            }
+        }
+    </script>
+<!-- menu -->
+  <script>
+    function toggleSidebar() {
+      const sidebar = document.getElementById("sidebar");
+      const overlay = document.getElementById("overlay");
+
+      sidebar.classList.toggle("open");
+      overlay.classList.toggle("active");
+    }
+
+  </script>
+</body>
+</html>
